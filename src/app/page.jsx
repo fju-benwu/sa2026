@@ -16,7 +16,7 @@ export default function HomePage() {
     <div style={{ padding: 24 }}>
       <h1>Next.js (App Router) + Firebase</h1>
       <p>
-        <Link href="/test-list">檢視 Test 集合</Link>
+        <Link href="./test-list">檢視 Test 集合</Link>
       </p>
       {user ? (
         <div>
