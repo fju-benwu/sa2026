@@ -57,4 +57,39 @@ if (fs.existsSync(pagesHtmlDir)) {
 // Add .nojekyll to ensure GitHub Pages serves files starting with _
 fs.writeFileSync(path.join(outDir, '.nojekyll'), '')
 
+// Replace paths in HTML files to ensure /sa2026 prefix for GitHub Pages
+const basePath = '/sa2026'
+
+function fixPathsInFile(filePath) {
+  try {
+    let content = fs.readFileSync(filePath, 'utf8')
+    const original = content
+    
+    // Replace all /_next/ with /sa2026/_next/
+    content = content.replace(/\/_next\//g, basePath + '/_next/')
+    
+    if (content !== original) {
+      fs.writeFileSync(filePath, content, 'utf8')
+    }
+  } catch (err) {
+    // silently skip non-text files
+  }
+}
+
+function walkAndReplace(dir) {
+  if (!fs.existsSync(dir)) return
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      walkAndReplace(fullPath)
+    } else if (entry.name.endsWith('.html') || entry.name.endsWith('.js')) {
+      fixPathsInFile(fullPath)
+    }
+  }
+}
+
+walkAndReplace(outDir)
+
 console.log('Export collected into:', outDir)
