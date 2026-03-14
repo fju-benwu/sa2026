@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { auth, signInWithGoogle, signOutUser } from '../firebaseClient'
 import { onAuthStateChanged } from 'firebase/auth'
 
@@ -15,7 +16,7 @@ export default function HomePage() {
     <div style={{ padding: 24 }}>
       <h1>Next.js (App Router) + Firebase</h1>
       <p>
-        <a href="/test-list">檢視 Test 集合</a>
+        <Link href="/test-list">檢視 Test 集合</Link>
       </p>
       {user ? (
         <div>
