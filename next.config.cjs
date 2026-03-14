@@ -12,8 +12,8 @@ module.exports = {
   reactStrictMode: true,
   // Enable static HTML export
   output: 'export',
-  // Set asset prefix for GitHub Pages subpath
-  assetPrefix: '/sa2026',
+  // Note: assetPrefix does not work reliably with static export
+  // Path rewriting is done in collect-export.cjs instead
   // Ensure exported paths include trailing slash (good for GitHub Pages)
   trailingSlash: true,
   webpack: (config) => {

@@ -57,39 +57,47 @@ if (fs.existsSync(pagesHtmlDir)) {
 // Add .nojekyll to ensure GitHub Pages serves files starting with _
 fs.writeFileSync(path.join(outDir, '.nojekyll'), '')
 
-// Replace paths in HTML files to ensure /sa2026 prefix for GitHub Pages
+// FIX PATHS FOR GITHUB PAGES /sa2026 SUBPATH
 const basePath = '/sa2026'
+let filesUpdated = 0
 
-function fixPathsInFile(filePath) {
-  try {
-    let content = fs.readFileSync(filePath, 'utf8')
-    const original = content
-    
-    // Replace all /_next/ with /sa2026/_next/
-    content = content.replace(/\/_next\//g, basePath + '/_next/')
-    
-    if (content !== original) {
-      fs.writeFileSync(filePath, content, 'utf8')
-    }
-  } catch (err) {
-    // silently skip non-text files
-  }
-}
-
-function walkAndReplace(dir) {
-  if (!fs.existsSync(dir)) return
-  const entries = fs.readdirSync(dir, { withFileTypes: true })
+function updateAllPaths(dirPath) {
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true })
   
   for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name)
+    const fullPath = path.join(dirPath, entry.name)
+    
     if (entry.isDirectory()) {
-      walkAndReplace(fullPath)
-    } else if (entry.name.endsWith('.html') || entry.name.endsWith('.js')) {
-      fixPathsInFile(fullPath)
+      updateAllPaths(fullPath)
+    } else if (entry.isFile()) {
+      try {
+        // Read file (assume utf8)
+        let content = fs.readFileSync(fullPath, 'utf8')
+        let updated = false
+        
+        // Replace all /_next/ with /sa2026/_next/
+        if (content.includes('/_next/')) {
+          content = content.replace(/\/_next\//g, '/sa2026/_next/')
+          updated = true
+        }
+        
+        // Replace href="/test-list with href="/sa2026/test-list
+        if (content.includes('href="/test-list')) {
+          content = content.replace(/href="\/test-list/g, 'href="/sa2026/test-list')
+          updated = true
+        }
+        
+        if (updated) {
+          fs.writeFileSync(fullPath, content, 'utf8')
+          filesUpdated++
+        }
+      } catch (err) {
+        // Skip binary files
+      }
     }
   }
 }
 
-walkAndReplace(outDir)
-
+updateAllPaths(outDir)
+console.log(`Updated ${filesUpdated} files with /sa2026 prefix for GitHub Pages`)
 console.log('Export collected into:', outDir)
