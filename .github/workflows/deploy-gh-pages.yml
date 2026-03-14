@@ -33,14 +33,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Debug - Check Secrets
-        env:
-          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
-          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
-        run: |
-          echo "API Key set: $([ -z '${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}' ] && echo 'NO' || echo 'YES')"
-          echo "Project ID: $NEXT_PUBLIC_FIREBASE_PROJECT_ID"
-
       - name: Build and collect export
         env:
           NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
