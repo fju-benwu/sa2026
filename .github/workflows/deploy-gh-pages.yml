@@ -34,6 +34,13 @@ jobs:
         run: npm ci
 
       - name: Build and collect export
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyC08pfdUHWT4-QUWuGmKjBicnS7AWRMx7g
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: fju-im-sa.firebaseapp.com
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: fju-im-sa
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: fju-im-sa.firebasestorage.app
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "613242701553"
+          NEXT_PUBLIC_FIREBASE_APP_ID: "1:613242701553:web:d1ed3e5680025277d64b50"
         run: npm run export
 
       - name: Deploy to GitHub Pages
