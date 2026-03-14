@@ -4,6 +4,7 @@ const path = require('path')
 const root = process.cwd()
 const nextServerDir = path.join(root, '.next', 'server')
 const outDir = path.join(root, 'out')
+const basePath = '/sa2026'
 
 function ensureDir(p) {
   if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true })
@@ -56,5 +57,34 @@ if (fs.existsSync(pagesHtmlDir)) {
 
 // Add .nojekyll to ensure GitHub Pages serves files starting with _
 fs.writeFileSync(path.join(outDir, '.nojekyll'), '')
+
+// Replace paths in HTML files to use basePath for GitHub Pages deployment
+function fixPathsInHtml(filePath) {
+  let content = fs.readFileSync(filePath, 'utf-8')
+  // Replace /_next/ with basePath/_next/ in all paths
+  const fixed = content.replace(/\/_next\//g, basePath + '/_next/')
+  // Also replace /test-list href for router links
+  const fixed2 = fixed.replace(/href="\/test-list/g, `href="${basePath}/test-list`)
+  if (fixed2 !== content) {
+    fs.writeFileSync(filePath, fixed2)
+  }
+}
+
+// Walk through all HTML files in out/ and fix paths
+function walkAndFixPaths(dir) {
+  if (!fs.existsSync(dir)) return
+  const entries = fs.readdirSync(dir)
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry)
+    const stat = fs.statSync(fullPath)
+    if (stat.isDirectory()) {
+      walkAndFixPaths(fullPath)
+    } else if (entry.endsWith('.html')) {
+      fixPathsInHtml(fullPath)
+    }
+  }
+}
+
+walkAndFixPaths(outDir)
 
 console.log('Export collected into:', outDir)
