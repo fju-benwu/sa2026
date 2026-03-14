@@ -10,6 +10,10 @@
 // running `next dev` without `--turbo` or in certain production flows).
 module.exports = {
   reactStrictMode: true,
+  // Enable static HTML export
+  output: 'export',
+  // Ensure exported paths include trailing slash (good for GitHub Pages)
+  trailingSlash: true,
   webpack: (config) => {
     config.resolve = config.resolve || {}
     config.resolve.alias = {

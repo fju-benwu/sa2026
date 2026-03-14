@@ -17,6 +17,8 @@
     "e2e:ci": "npx playwright install && npx playwright test --reporter=dot",
     "build": "next build",
     "start": "next start",
+    "export": "next build && node scripts/collect-export.cjs",
+    "deploy:gh-pages": "npm run export && npx gh-pages -d out",
     "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
