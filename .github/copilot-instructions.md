@@ -4,9 +4,17 @@
 Purpose
 - Help AI coding agents become productive quickly by describing this repo's architecture, key workflows, and discovered conventions.
 
+**GitHub Repository**
+- **Organization**: `fju-benwu`
+- **Repository**: `sa2026`
+- **URL**: https://github.com/fju-benwu/sa2026
+- **Visibility**: Private
+- **Clone**: `git clone https://github.com/fju-benwu/sa2026.git`
+
 **Big Picture**
 - This is a Next.js frontend using the App Router with **Turbopack** as the default bundler and Firebase for Auth + Firestore (see `package.json` scripts: `dev`, `build`, `deploy`).
 - Firebase is initialized in `src/firebaseClient.js`. This project does not use local Firebase emulators—unit tests mock Firebase modules instead.
+- All code and collaborative work is managed via GitHub's main branch (`main`).
 
 **Key Files & Components**
 - `src/firebaseClient.js`: Firebase init, emulator connection, and auth helper exports (`auth`, `db`, `signInWithGoogle`, `signOutUser`, `useEmulator`).
@@ -23,6 +31,7 @@ Purpose
 - `next.config.cjs`: Webpack fallback configuration (aliased `undici: false`).
 
 **How to Run / Dev Workflows**
+- **Clone the repository**: `git clone https://github.com/fju-benwu/sa2026.git && cd sa2026`
 - Install dependencies: `npm install`
 - Dev server (Turbopack): `npm run dev` (recommended—fast startup with HMR)
   - Fallback: `npm run dev:webpack` (uses webpack)
@@ -68,6 +77,20 @@ Purpose
 - Prefer updating `src/firebaseClient.js` for Firebase-related behavior; keep emulator-toggle logic intact to allow local dev without project credentials.
 - For tests, follow existing mocking strategy (`vi.mock`) instead of changing runtime init behavior.
 
+**Git Workflow & Contributing Guidelines**
+- **Branch strategy**: Use `main` as the default branch. For collaborative work, create feature branches with descriptive names (e.g., `feature/user-authentication`, `fix/firestore-query`).
+- **Commit messages**: Keep commits atomic and descriptive. Use conventional format when possible (e.g., `feat: add test-list component`, `fix: resolve Firebase auth issue`).
+- **Pull requests**: Before pushing to `main`, create a PR for code review. Include a clear description of changes and any testing notes.
+- **Code review**: Team members should review PRs for code quality, adherence to conventions, and test coverage before merging.
+- **Keep main deployable**: Ensure `main` branch always has passing tests and is ready for production deployment.
+- **Local development setup**:
+  1. Clone: `git clone https://github.com/fju-benwu/sa2026.git`
+  2. Install deps: `npm install`
+  3. Create feature branch: `git checkout -b feature/your-feature`
+  4. Make changes and test: `npm run dev`, `npm run test`, `npm run test:e2e`
+  5. Commit and push: `git add . && git commit -m "feat: describe your feature" && git push origin feature/your-feature`
+  6. Create PR on GitHub and request review
+
 **Files to Inspect for Context**
 - `package.json`: Scripts and dependencies (note new `mcp:start` scripts and test scripts)
 - `src/firebaseClient.js`: Firebase init and emulator logic
@@ -78,9 +101,12 @@ Purpose
 - `scripts/add-test-data.js`: Helper script used to add sample data to Firestore
 
 **Recent Work (Latest Update)**
+- Deployed project to GitHub: `fju-benwu/sa2026` private repository created and initialized.
+- Repository setup: Configured git with `main` branch, all project files committed and pushed to GitHub.
 - Added `/test-list` page and test data script (`scripts/add-test-data.js`).
 - Added unit test `__tests__/test-list.test.jsx` and Playwright E2E `e2e/test-list.spec.js`.
 - Added `npm run mcp:start` and `.mcprc` to aid MCP client integrations and editor configs.
 - Root layout `src/app/layout.jsx` updated to set `<html lang="zh-Hant">`.
+- Established Git workflow guidelines and Contributing Guidelines for team collaboration.
 
 If anything above is unclear or you want instructions to be more prescriptive (example PR templates, local debugging steps, or CI changes), tell me which section to expand.
