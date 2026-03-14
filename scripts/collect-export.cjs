@@ -57,43 +57,4 @@ if (fs.existsSync(pagesHtmlDir)) {
 // Add .nojekyll to ensure GitHub Pages serves files starting with _
 fs.writeFileSync(path.join(outDir, '.nojekyll'), '')
 
-// **CRITICAL FIX**: Replace all /_next/ paths with /sa2026/_next/ in HTML and JS files
-// This is necessary because assetPrefix doesn't fully apply in static export mode
-const basePath = '/sa2026'
-
-function replacePathsInFile(filePath) {
-  try {
-    let content = fs.readFileSync(filePath, 'utf8')
-    const original = content
-    
-    // Replace all /_next/ with /sa2026/_next/
-    content = content.replace(/\/_next\//g, basePath + '/_next/')
-    
-    // Replace href="/test-list with href="/sa2026/test-list
-    content = content.replace(/href="\/test-list/g, `href="${basePath}/test-list`)
-    
-    if (content !== original) {
-      fs.writeFileSync(filePath, content, 'utf8')
-    }
-  } catch (err) {
-    // silently skip non-text files
-  }
-}
-
-function walkAndReplace(dir) {
-  if (!fs.existsSync(dir)) return
-  const entries = fs.readdirSync(dir, { withFileTypes: true })
-  
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name)
-    if (entry.isDirectory()) {
-      walkAndReplace(fullPath)
-    } else if (entry.name.endsWith('.html') || entry.name.endsWith('.js') || entry.name.endsWith('.json')) {
-      replacePathsInFile(fullPath)
-    }
-  }
-}
-
-walkAndReplace(outDir)
-
 console.log('Export collected into:', outDir)
