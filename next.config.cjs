@@ -12,8 +12,8 @@ module.exports = {
   reactStrictMode: true,
   // Enable static HTML export
   output: 'export',
-  // GitHub Pages deploy under /sa2026 subpath - required for correct static asset loading
-  basePath: '/sa2026',
+  // GitHub Pages deploy under /sa2026 subpath - applied to all static assets
+  assetPrefix: '/sa2026',
   // Ensure exported paths include trailing slash (good for GitHub Pages)
   trailingSlash: true,
   webpack: (config) => {
